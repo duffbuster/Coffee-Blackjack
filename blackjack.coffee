@@ -39,21 +39,54 @@ deal = ->
   # Call constructor
   new Card(suit, number)
 
-# Deal cards
-card1 = deal()
-card2 = deal()
+###
+  - Give user 2 cards
+  - while score <= 21
+    - Display cards
+    - If under 21
+      - ask hit or stay
+    - else if == 21
+      - Blackjack!
+    - else
+      - Bust
+###
+console.log "Welcome to Blackjack!"
+console.log "=====================\n"
 
+# Deal a new hand
+myHand = [deal(), deal()]
 
-# Hand class
-Hand = ->
-  cards = []
+# start score at 0
+score = 0
 
-  @draw = ->
-    cards.push deal()
+stdin = process.openStdin()
+stdin.setEncoding 'utf8'
 
-  @score = ->
-    sum = 0
-    sum += card.getValue() for card in cards
-    sum
+prompt = (text) ->
+  console.log text
+  res = ""
+  stdin.on 'data', (input) ->
+    input = input.trim()
+    if input == 'hit' or input == 'Hit'
+      res = "Hit"
+    else if input == 'stay' or input == 'Stay'
+      res = "Stay"
+    else
+      res = "Error"
+  return res
 
-  return this
+while score <= 21
+  console.log "Your cards:"
+  console.log card.getCardName() for card in myHand
+  score += card.getValue() for card in myHand
+  console.log score
+  if score < 21
+    res = prompt("Would you like to hit or stay?")
+    # if res == "hit" or res == "Hit"
+      # myHand.push deal()
+  else if score == 21
+    console.log "Blackjack! You Win!"
+    break
+  else if score > 21
+    console.log "Bust! You lose!"
+    break
